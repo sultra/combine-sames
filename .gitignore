@@ -3,6 +3,5 @@ node_modules
 *.log
 .idea
 .vscode
-package-lock.json
 dist/
 cache/
