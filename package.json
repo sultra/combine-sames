@@ -1,7 +1,8 @@
 {
   "name": "combine-sames-device",
-  "version": "0.3.10",
+  "version": "0.1.0",
   "description": "将分网关中同一设备的状态点绑定到一起，该项目仅仅是模块",
+  "main": "dist/lib/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dist && tsc -w false --sourceMap false",
