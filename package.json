@@ -1,0 +1,21 @@
+{
+  "name": "combine-sames-device",
+  "version": "0.3.10",
+  "description": "将分网关中同一设备的状态点绑定到一起，该项目仅仅是模块",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dist && tsc -w false --sourceMap false",
+    "devBuild": "rm -rf dist && tsc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "debug": "~2.6.9",
+    "morgan": "~1.9.0",
+    "@types/morgan": "^1.7.35",
+    "@types/debug": "0.0.30",
+    "@types/node": "^9.6.2",
+    "ts-node": "^6.1.0"
+  },
+  "author": "zly",
+  "license": "UNLICENSED"
+}
