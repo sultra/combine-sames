@@ -16,7 +16,6 @@ export class CombineGroupAutoReset extends CombineGroup {
     this._TimeOut_Second = timeoutSecond || 30;
     this._cacheDelay = new Map<string, any>();
     this.on(TIMEOUT_EVENT_NAME, (delayReset, theKey) => {
-      console.log('on reset');
       delayReset(theKey);
     });
   }
@@ -29,9 +28,7 @@ export class CombineGroupAutoReset extends CombineGroup {
     this.emit(TIMEOUT_EVENT_NAME
       , (theKey) => {
         const delay = setTimeout(() => {
-          console.log('do reset');
           this.reset();
-          console.log('done reset');
         }, this._TimeOut_Second * 1000);
         this._cacheDelay.set(theKey, delay);
       }
