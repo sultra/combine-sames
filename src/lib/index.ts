@@ -85,6 +85,11 @@ export default class Entrypoint {
     const theKey = this.getTheKey(receive);
     // 判断key是否在同一组中
     const memberId: number = receive[this._config.whatSameGroupIdField];
+    const groupConfig = this._configRule.get(memberId);
+    if (!groupConfig) {
+      console.warn('invalid member ');
+      return [];
+    }
     // 如果是已经存在的key
     let combine: ICombine;
     if (this._combineGroup.has(theKey)) {
@@ -97,7 +102,6 @@ export default class Entrypoint {
     } else {
       // 创建出新的combine，将数据、成员放进去
       // 先取出基础配置对象
-      const groupConfig: GroupsConfigObj = this._configRule.get(memberId) || { groupIds: [1], topic: 'haha' };
       combine = whatCombineGroupCallback.create(groupConfig, this._config.timeout);
     }
     combine.insertData(receive, memberId, theKey);
@@ -126,5 +130,5 @@ export default class Entrypoint {
 }
 interface CreateCombineGroup{
   createNull():ICombine;
-  create(groupConfig: GroupsConfigObj,timeout?:number):ICombine;
+  create(groupConfig?: GroupsConfigObj,timeout?:number):ICombine;
 }
