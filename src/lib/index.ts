@@ -36,7 +36,6 @@ export default class Entrypoint {
   initCombineRule(): Map<number, GroupsConfigObj> {
     const init = new Init();
     const configRule = init.createCombineConfigRule(this._config.groups);
-    // const combineRule = init.createCombineRule(configRule);
     return configRule;
   }
 
@@ -54,39 +53,34 @@ export default class Entrypoint {
    * 不会自动清理
    * @param receive 收到的数据
    */
-  inputDataIntoGroup(receive: any): void {
-    // 取出key字段
-    const theKey = this.getTheKey(receive);
-    // console.log(theKey);
-    // 判断key是否在同一组中
-    const memberId: number = receive[this._config.whatSameGroupIdField];
-    // 如果是已经存在的key
-    let combine: ICombine;
-    if (this._combineGroup.has(theKey)) {
-      // 取出缓存，判定是否有过member\
-      combine = this._combineGroup.get(theKey) || new CombineGroup([1, 2]);
-      if (combine.getMember().get(memberId) === true) {
-        // 说明已经有过该成员，执行重置操作
-        combine.reset();
+  inputDataIntoGroup(receive: any): Array<any> {
+    return this.handleInputDataIntoGroup(receive, {
+      createNull: ()=>{
+        return new CombineGroup([1, 2]);
+      },
+      create: (groupConfig: GroupsConfigObj)=>{
+        return new CombineGroup(groupConfig.groupIds)
       }
-    } else {
-      // 创建出新的combine，将数据、成员放进去
-      // 先取出基础配置对象
-      const groupConfig: GroupsConfigObj = this._configRule.get(memberId) || { groupIds: [1, 2], topic: 'haha' };
-      combine = new CombineGroup(groupConfig.groupIds);
-      // combine.insertData(receive,memberId);
-    }
-    combine.insertData(receive, memberId, theKey);
-    // 加入缓存中
-    this._combineGroup.set(theKey, combine);
+    });
   }
 
+
+  inputDataIntoGroupAutoReset(receive: any): Array<any> {
+    return this.handleInputDataIntoGroup(receive, {
+      createNull: () => {
+        return new CombineGroupAutoReset([1], 2);
+      },
+      create: (groupConfig: GroupsConfigObj,timeout:number) => {
+        return new CombineGroupAutoReset(groupConfig.groupIds,timeout);
+      }
+    });
+  }
   /**
   * 将数据放入一组中
   * 会自动清理
   * @param receive 收到的数据
   */
-  inputDataIntoGroupAutoReset(receive: any): void {
+  private handleInputDataIntoGroup(receive: any, whatCombineGroupCallback: CreateCombineGroup): Array<any> {
     // 取出key字段
     const theKey = this.getTheKey(receive);
     // 判断key是否在同一组中
@@ -95,7 +89,7 @@ export default class Entrypoint {
     let combine: ICombine;
     if (this._combineGroup.has(theKey)) {
       // 取出缓存，判定是否有过member\
-      combine = this._combineGroup.get(theKey) || new CombineGroupAutoReset([1], 2);
+      combine = this._combineGroup.get(theKey) || whatCombineGroupCallback.createNull();
       if (combine.getMember().get(memberId) === true) {
         // 说明已经有过该成员，执行重置操作
         combine.reset();
@@ -104,14 +98,17 @@ export default class Entrypoint {
       // 创建出新的combine，将数据、成员放进去
       // 先取出基础配置对象
       const groupConfig: GroupsConfigObj = this._configRule.get(memberId) || { groupIds: [1], topic: 'haha' };
-      combine = new CombineGroupAutoReset(groupConfig.groupIds, this._config.timeout);
-      // combine.insertData(receive,memberId);
+      combine = whatCombineGroupCallback.create(groupConfig, this._config.timeout);
     }
     combine.insertData(receive, memberId, theKey);
     // 加入缓存中
     this._combineGroup.set(theKey, combine);
+    if (combine.checkFinish()==true) {
+      return combine.getData();
+    }else{
+      return [];
+    }
   }
-
 
   /**
    * 获取绑定好成为一组的数据集合
@@ -126,6 +123,8 @@ export default class Entrypoint {
     }
     return [];
   }
-
-
+}
+interface CreateCombineGroup{
+  createNull():ICombine;
+  create(groupConfig: GroupsConfigObj,timeout?:number):ICombine;
 }
