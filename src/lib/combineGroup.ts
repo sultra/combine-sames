@@ -19,18 +19,17 @@ export class CombineGroup extends EventEmitter implements ICombine {
   // 总进度
   private _totalProgress: number;
 
+  private _groupIds:Array<number>;
 
   constructor(groupIds: Array<number>) {
     super();
     // this._topic=topic;
     this._data = [];
     this._currentProgress = 0;
-    // this._groupIds=groupIds;
+    this._groupIds=groupIds;
     this._totalProgress = groupIds.length;
     this._member = new Map<number, boolean>();
-    groupIds.forEach((id) => {
-      this._member.set(id, false);
-    });
+    this.memberInit();
   }
 
 
@@ -113,6 +112,14 @@ export class CombineGroup extends EventEmitter implements ICombine {
   public reset() {
     this._currentProgress = 0;
     this._data.splice(0, this._totalProgress);
+    // 重置member
+    this.memberInit();
+  }
+
+  private memberInit(){
+    this._groupIds.forEach((id) => {
+      this._member.set(id, false);
+    });
   }
 
 }
