@@ -4,9 +4,12 @@
   "description": "将分网关中同一设备的状态点绑定到一起，该项目仅仅是模块",
   "main": "dist/lib/",
   "scripts": {
+    "setup": "npm install --onle=dev",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && tsc -w false --sourceMap false",
-    "devBuild": "rm -rf dist && tsc"
+    "build-watch": "tsc --watch",
+    "build": "rm -rf dist && tsc --sourceMap false",
+    "devBuild": "rm -rf dist && tsc",
+    "typedoc": "typedoc --out ./docs --mode modules --tsconfig ./tsconfig.json ./src/"
   },
   "dependencies": {},
   "devDependencies": {
@@ -15,7 +18,9 @@
     "@types/morgan": "^1.7.35",
     "@types/debug": "0.0.30",
     "@types/node": "^9.6.2",
-    "ts-node": "^6.1.0"
+    "ts-node": "^6.1.0",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.3.3333"
   },
   "author": "zly",
   "license": "UNLICENSED"
