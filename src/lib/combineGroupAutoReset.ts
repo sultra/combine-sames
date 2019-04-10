@@ -1,4 +1,6 @@
 import { CombineGroup } from "./combineGroup";
+import { EventEmitter } from "events";
+import { AUTO_RESET_EVENT_NAME } from "../model/MetaType";
 const TIMEOUT_EVENT_NAME: string = 'timeout';
 
 /**
@@ -10,11 +12,14 @@ export class CombineGroupAutoReset extends CombineGroup {
 
   private _cacheDelay: Map<string, any>;
   private _TimeOut_Second: number;
+  // private _cacheData: Map<string,Array<any>>;
+  private _event:EventEmitter;
 
-  constructor(groupIds: Array<number>, timeoutSecond: number) {
+  constructor(groupIds: Array<number>, timeoutSecond: number, putinEvent: EventEmitter) {
     super(groupIds);
     this._TimeOut_Second = timeoutSecond || 30;
     this._cacheDelay = new Map<string, any>();
+    this._event = putinEvent;
     this.on(TIMEOUT_EVENT_NAME, (delayReset, theKey) => {
       delayReset(theKey);
     });
@@ -28,11 +33,19 @@ export class CombineGroupAutoReset extends CombineGroup {
     this.emit(TIMEOUT_EVENT_NAME
       , (theKey) => {
         const delay = setTimeout(() => {
-          this.reset();
+          // this.reset();
+          this.reseta(theKey);
         }, this._TimeOut_Second * 1000);
         this._cacheDelay.set(theKey, delay);
       }
       , theKey);
+  }
+
+  public reseta(key: string) {
+    // this._cacheData.set(key,this.data);
+    this._event.emit(AUTO_RESET_EVENT_NAME,{key:key,value:this.data});
+    // 调父类reset
+    super.reset();
   }
 
 

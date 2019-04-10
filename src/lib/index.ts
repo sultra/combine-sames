@@ -1,9 +1,10 @@
 import { Init } from "./init";
-import { GroupsConfigObj } from "../model/MetaType";
+import { GroupsConfigObj, AUTO_RESET_EVENT_NAME } from "../model/MetaType";
 import { CombineGroupAutoReset } from "./combineGroupAutoReset";
 import { ConfigDefine } from "../model/MetaType";
 import { ICombine } from "./Icombine";
 import { CombineGroup } from "./combineGroup";
+import { EventEmitter } from "events";
 
 
 
@@ -14,11 +15,13 @@ export default class Entrypoint {
   private _combineGroup: Map<string, ICombine>;
 
   private _configRule: Map<number, GroupsConfigObj>;
+  private autoResetEvent: EventEmitter;
 
   constructor(config: ConfigDefine) {
     this._config = config;
     this._combineGroup = new Map<string, ICombine>();
     this._configRule = this.initCombineRule();
+    this.autoResetEvent = new EventEmitter();
   }
 
   /**
@@ -68,10 +71,10 @@ export default class Entrypoint {
   inputDataIntoGroupAutoReset(receive: any): Array<any> {
     return this.handleInputDataIntoGroup(receive, {
       createNull: () => {
-        return new CombineGroupAutoReset([1], 2);
+        return new CombineGroupAutoReset([1], 2,this.autoResetEvent);
       },
       create: (groupConfig: GroupsConfigObj,timeout:number) => {
-        return new CombineGroupAutoReset(groupConfig.groupIds,timeout);
+        return new CombineGroupAutoReset(groupConfig.groupIds, timeout, this.autoResetEvent);
       }
     });
   }
@@ -126,6 +129,12 @@ export default class Entrypoint {
       }
     }
     return [];
+  }
+
+  receiveAutoResetData(callback:Function):void{
+    this.autoResetEvent.on(AUTO_RESET_EVENT_NAME,(data)=>{
+      callback(data);
+    });
   }
 }
 interface CreateCombineGroup{
