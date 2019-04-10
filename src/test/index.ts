@@ -7,70 +7,85 @@ const groupConfig = require('./demo.json');
 
 const main=new Entrypoint(groupConfig);
 
-// const cg: CombineGroup=new CombineGroup([1,2,3]);
+const testData = [{
+  "time": "1554803766208",
+  "messageType": "0",
+  "isNumber": "1",
+  "deviceId": "270101010905000001",
+  "monitor": "ph",
+  "monitorTypeId": 2701002,
+  "deviceTypeId": 2701,
+  "statusValue": "7.65",
+  "tenantId": "01"
+}, {
+  "time": "1554803766208",
+  "messageType": "0",
+  "isNumber": "1",
+  "deviceId": "270101010905000001",
+  "monitor": "ec",
+  "monitorTypeId": 2701005,
+  "deviceTypeId": 2701,
+  "statusValue": "776.4",
+  "tenantId": "01"
+}, {
+  "time": "1554803766209",
+  "messageType": "0",
+  "isNumber": "1",
+  "deviceId": "270101010905000001",
+  "monitor": "oxygen",
+  "monitorTypeId": 2701004,
+  "deviceTypeId": 2701,
+  "statusValue": "7.79",
+  "tenantId": "01"
+}, {
+  "time": "1554803766209",
+  "messageType": "0",
+  "isNumber": "1",
+  "deviceId": "270101010905000001",
+  "monitor": "temp",
+  "monitorTypeId": 2701001,
+  "deviceTypeId": 2701,
+  "statusValue": "22.0",
+  "tenantId": "01"
+}, {
+  "time": "1554803766209",
+  "messageType": "0",
+  "isNumber": "1",
+  "deviceId": "270101010905000001",
+  "monitor": "turbid",
+  "monitorTypeId": 2701003,
+  "deviceTypeId": 2701,
+  "statusValue": "0.67",
+  "tenantId": "01"
+}, {
+  "time": "1554803766209",
+  "messageType": "0",
+  "isNumber": "1",
+  "deviceId": "270101010905000001",
+  "monitor": "nitrogen",
+  "monitorTypeId": 2701008,
+  "deviceTypeId": 2701,
+  "statusValue": "0.6",
+  "tenantId": "01"
+}]
+main.receiveAutoResetData((data)=>{
+  console.log('faceLL:',data.value);
+});
 
-// const cacheConfig: Map<number, GroupsConfigObj>=main.initCombineRule();
+async function testCombine() {
+  for (let index = 0; index < testData.length; index++) {
+    const data = testData[index];
+    let res = main.inputDataIntoGroupAutoReset(data);
+    console.log(index, res);
+    await delay(200);
+  }
+  console.log('send end');
 
-const data={
-  deviceId:'123456789',
-  monitorTypeId: 701001,
-  msg:'niubile'
+  await delay(8000);
+  console.log('over');
 }
 
-const data2 = {
-  deviceId: '123456789',
-  monitorTypeId: 701002,
-  msg: 'tianxia'
-}
 
-const data3 = {
-  deviceId: '123456789',
-  monitorTypeId: 701003,
-  msg: 'dashan'
-}
-
-const data4 = {
-  deviceId: '123456789',
-  monitorTypeId: 701001,
-  msg: 'niubi2'
-}
-
-const data5 = {
-  deviceId: '123456789',
-  monitorTypeId: 709912,
-  msg: 'niubi2'
-}
-
-//  main.inputDataIntoGroup(data);
-let res=main.inputDataIntoGroup(data);
-console.log('1 ',res);
-delay(1000).then((rev)=>{
-  // const theKey = main.getTheKey(data);
-  // const cg: ICombine = main.combineGroup.get(theKey) || new CombineGroup([9, 8, 7, 6]);
-  // console.log('insert 1',cg.getCurrentProgress());
-  // main.inputDataIntoGroup(data2);
-  res=main.inputDataIntoGroup(data2);
-  console.log('2 ', res);
-  // console.log('insert 2',cg.getCurrentProgress());
-  // console.log(cg.getTotalProgress());
-  res = main.inputDataIntoGroup(data3);
-  console.log('3 ', res);
-  res = main.inputDataIntoGroup(data4);
-  console.log('2-1 ', res);
-
-  res = main.inputDataIntoGroup(data2);
-  console.log('2-2 ', res);
-  // console.log('insert 2',cg.getCurrentProgress());
-  // console.log(cg.getTotalProgress());
-  
-  res = main.inputDataIntoGroup(data5);
-  console.log('5 ', res);
-
-  res = main.inputDataIntoGroup(data3);
-  console.log('2-3 ', res);
-  setTimeout(() => {
-    console.log('end');
-    // console.log(cg.getCurrentProgress());
-    // console.log(cg.getTotalProgress());
-  }, 8000);
+testCombine().then((rev)=>{
+  // console.log(rev);
 });
