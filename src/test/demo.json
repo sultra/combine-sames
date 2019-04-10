@@ -1,13 +1,10 @@
 {
   "groups": [{
-    "groupIds": [2701002, 2701004, 2701006, 2701007, 2701008, 2701009],
+    "groupIds": [2701002, 2701004, 2701008, 2701009],
     "topic": "water"
-  }, {
-    "groupIds": [701001, 701002, 701003],
-    "topic": "sanxiang"
   }],
   "keyFields": ["deviceId"],
   "whatSameGroupIdField": "monitorTypeId",
-  "openTimeoutReset":true,
-  "timeout":3
+  "openTimeoutReset": true,
+  "timeout": 3
 }
