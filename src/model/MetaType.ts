@@ -16,3 +16,5 @@ export interface ConfigDefine {
     // 超时时间，秒为单位
     timeout: number;
 }
+
+export const AUTO_RESET_EVENT_NAME: string = 'abcd';
