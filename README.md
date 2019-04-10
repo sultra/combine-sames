@@ -37,3 +37,9 @@ main.inputDataIntoGroup(data);
 main.inputDataIntoGroupAutoReset(data)
 ```
 
+获取自动清理时已经组合好的数据,前提是必须使用 `main.inputDataIntoGroupAutoReset(data)`方法
+``` typescript
+main.receiveAutoResetData((data)=>{
+  console.log('faceLL:',data);
+});
+```
