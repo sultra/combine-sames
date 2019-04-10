@@ -1,6 +1,6 @@
 {
   "name": "combine-sames",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "将分网关中同一设备的状态点绑定到一起，该项目仅仅是模块",
   "main": "dist/lib/",
   "scripts": {
