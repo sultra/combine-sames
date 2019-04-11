@@ -13,7 +13,7 @@ export class CombineGroupAutoReset extends CombineGroup {
   private _cacheDelay: Map<string, any>;
   private _TimeOut_Second: number;
   // private _cacheData: Map<string,Array<any>>;
-  private _event:EventEmitter;
+  private _event: EventEmitter;
 
   constructor(groupIds: Array<number>, timeoutSecond: number, putinEvent: EventEmitter) {
     super(groupIds);
@@ -42,11 +42,12 @@ export class CombineGroupAutoReset extends CombineGroup {
   }
 
   public reseta(key: string) {
-    // this._cacheData.set(key,this.data);
-    this._event.emit(AUTO_RESET_EVENT_NAME,{key:key,value:this.data});
+    // 只有当有数据且没有完成配置设定的监测点时将数据返回
+    if (this.data && this.checkFinish()===false) {
+      this._event.emit(AUTO_RESET_EVENT_NAME, { key: key, value: this.data });
+    }
     // 调父类reset
     super.reset();
   }
-
 
 }
