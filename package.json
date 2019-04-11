@@ -1,6 +1,6 @@
 {
   "name": "combine-sames",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "将分网关中同一设备的状态点绑定到一起，该项目仅仅是模块",
   "main": "dist/lib/",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-watch": "tsc --watch",
     "build": "rm -rf dist && tsc --sourceMap false",
-    "devBuild": "rm -rf dist && tsc",
+    "devBuild": "rm -rf dist && tsc && cp src/test/demo.json dist/test/",
     "typedoc": "typedoc --out ./docs --mode modules --tsconfig ./tsconfig.json ./src/"
   },
   "dependencies": {},
