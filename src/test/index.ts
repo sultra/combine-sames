@@ -1,6 +1,4 @@
 import Entrypoint from "../lib";
-import { ICombine } from "../lib/Icombine";
-import { CombineGroup } from "../lib/combineGroup";
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const groupConfig = require('./demo.json');
@@ -53,7 +51,7 @@ const testData = [{
   "isNumber": "1",
   "deviceId": "270101010905000001",
   "monitor": "turbid",
-  "monitorTypeId": 2701003,
+  "monitorTypeId": 2701009,
   "deviceTypeId": 2701,
   "statusValue": "0.67",
   "tenantId": "01"
